@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   'start.learning': {
     id: 'start.learning',
-    defaultMessage: '{siteName} Connecting ',
+    defaultMessage: 'KKU Academy Connecting ',
     description: 'Header text for logistration MFE pages',
   },
   'with.site.name': {
