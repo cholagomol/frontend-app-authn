@@ -341,7 +341,11 @@ const RegistrationPage = (props) => {
                   handleChange={handleOnChange}
                   handleErrorChange={handleErrorChange}
                   errorMessage={errors.username}
-                  helpText={'*** นักษาให้กรอก username เป็น รหัสนิสิต',[formatMessage(messages['help.text.username.1']), formatMessage(messages['help.text.username.2'])]}
+                  helpText={[
+                        "*** นักษาให้กรอก username เป็น รหัสนิสิต",
+                        formatMessage(messages['help.text.username.1']),
+                        formatMessage(messages['help.text.username.2'])
+                  ]}
                   floatingLabel={formatMessage(messages['registration.username.label']),'*** นักษาให้กรอก username เป็น รหัสนิสิต'}
                 />
               )}
