@@ -6,7 +6,7 @@ import { getConfig } from '@edx/frontend-platform';
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
-import { Form, Spinner, StatefulButton,Alert } from '@openedx/paragon';
+import { Form, Spinner, StatefulButton } from '@openedx/paragon';
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -53,28 +53,6 @@ import {
  */
 const RegistrationPage = (props) => {
 
-  const [showAlert, setShowAlert] = useState(false);
-
-  useEffect(() => {
-    setShowAlert(true);
-  }, []);
-
-  return (
-    <div>
-      {showAlert && (
-        <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-          Hello
-        </Alert>
-      )}
-      {/* ส่วนอื่น ๆ ของคอมโพเนนต์ */}
-    </div>
-  );
-
-
-
-
-
-  
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
