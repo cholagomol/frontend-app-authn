@@ -342,7 +342,7 @@ const RegistrationPage = (props) => {
                   handleErrorChange={handleErrorChange}
                   errorMessage={errors.username}
                   helpText={[
-                        "username นักศึกษาที่เรียนรายวิชา CP001001 ให้กรอก รหัสนิสิต",
+                        "Username นักศึกษาที่เรียนรายวิชา CP001001 ให้กรอก รหัสนิสิต",
                         formatMessage(messages['help.text.username.1']),
                         formatMessage(messages['help.text.username.2'])
                       ]}
