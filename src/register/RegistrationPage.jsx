@@ -346,7 +346,7 @@ const RegistrationPage = (props) => {
                         formatMessage(messages['help.text.username.1']),
                         formatMessage(messages['help.text.username.2'])
                       ]}
-                    floatingLabel={"username นักศึกษาที่เรียนรายวิชา CP001001 ให้กรอก รหัสนิสิต"}
+                    floatingLabel={"Username นักศึกษาที่เรียนรายวิชา CP001001 ให้กรอก รหัสนิสิต"}
                 />
               )}
               {!currentProvider && (
