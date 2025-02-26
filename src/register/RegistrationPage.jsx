@@ -52,6 +52,29 @@ import {
  * Main Registration Page component
  */
 const RegistrationPage = (props) => {
+
+  const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    setShowAlert(true);
+  }, []);
+
+  return (
+    <div>
+      {showAlert && (
+        <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
+          Hello
+        </Alert>
+      )}
+      {/* ส่วนอื่น ๆ ของคอมโพเนนต์ */}
+    </div>
+  );
+
+
+
+
+
+  
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
@@ -107,24 +130,6 @@ const RegistrationPage = (props) => {
   /**
    * Set the userPipelineDetails data in formFields for only first time
    */
-const RegistrationPage = (props) => {
-  const [showAlert, setShowAlert] = useState(false);
-
-  useEffect(() => {
-    setShowAlert(true);
-  }, []);
-
-  return (
-    <div>
-      {showAlert && (
-        <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-          Hello
-        </Alert>
-      )}
-      {/* ส่วนอื่น ๆ ของคอมโพเนนต์ */}
-    </div>
-  );
-};
 
 
   
