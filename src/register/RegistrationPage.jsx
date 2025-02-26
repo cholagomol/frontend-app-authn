@@ -51,7 +51,6 @@ import {
 /**
  * Main Registration Page component
  */
-const [showAlert, setShowAlert] = useState(false);
 const RegistrationPage = (props) => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
