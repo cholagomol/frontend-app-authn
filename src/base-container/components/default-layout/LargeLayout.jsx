@@ -24,6 +24,7 @@ const LargeLayout = () => {
               { 'ml-6': getConfig().SITE_NAME !== 'edX' },
             )}
           >
+            <img src="https://academy.kku.ac.th/wp-content/uploads/2022/04/logo_2d_on_light_without_padding-300x170.png" alt="Server Status" width="300">
             {formatMessage(messages['start.learning'])}
             <div className="text-accent-a">
               {formatMessage(messages['with.site.name'], { siteName: getConfig().SITE_NAME })}
