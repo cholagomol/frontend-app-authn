@@ -19,14 +19,19 @@ const LargeLayout = () => {
         </Hyperlink>
         <div className="min-vh-100 d-flex align-items-center">
           <div className={classNames({ 'large-yellow-line mr-n4.5': getConfig().SITE_NAME === 'edX' })} />
+
+            <Image src="https://academy.kku.ac.th/wp-content/uploads/2022/04/logo_2d_on_light_without_padding-300x170.png" alt="KKU Academy Logo" width="300"
+            />
+          
           <h1
             className={classNames(
               'display-2 text-white mw-xs',
               { 'ml-6': getConfig().SITE_NAME !== 'edX' },
             )}
           >
-            <Image src="https://academy.kku.ac.th/wp-content/uploads/2022/04/logo_2d_on_light_without_padding-300x170.png" alt="KKU Academy Logo" width="300"
-            /><br>
+
+
+            
             {formatMessage(messages['start.learning'])}
             <div className="text-accent-a">
               {formatMessage(messages['with.site.name'], { siteName: getConfig().SITE_NAME })}
