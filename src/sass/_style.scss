@@ -624,15 +624,14 @@ select.form-control {
   align-items: center;
   justify-content: center;
   margin: 0 auto 2rem;
-  box-shadow: 0 4px 12px rgba(165, 28, 48, 0.3);
+  box-shadow: 0 4px 12px rgba(165, 28, 48, 0.3), 0 10px 20px rgba(165, 28, 48, 0.2);
 
-  .pgn__icon {
+  .pgn__icon, svg {
     color: #ffffff !important;
+    fill: #ffffff !important;
     width: 28px;
     height: 28px;
   }
-}
-  box-shadow: 0 10px 20px rgba(165, 28, 48, 0.2);
 }
 
 .kku-title {
