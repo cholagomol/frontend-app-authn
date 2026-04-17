@@ -522,30 +522,13 @@ select.form-control {
   width: 45%;
   position: relative;
   overflow: hidden;
-  background: #f1f5f9;
+  background-image: url('https://academy.kku.ac.th/wp-content/uploads/2022/09/about-us.jpg');
+  background-size: cover;
+  background-position: center;
 
   @media (max-width: 992px) {
     display: none;
   }
-}
-
-.kku-collage {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 10px;
-  height: 100%;
-  padding: 10px;
-  opacity: 1;
-
-  .collage-item {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-  }
-
-  .item-1 { grid-row: span 2; }
 }
 
 .kku-overlay {

@@ -19,12 +19,6 @@ import LoginComponentSlot from '../plugin-slots/LoginComponentSlot';
 import { RegistrationPage } from '../register';
 import { RegisterProvider } from '../register/components/RegisterContext';
 
-const PHOTOS = [
-  'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-  'https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-  'https://images.unsplash.com/photo-1498243639359-2cee3e309901?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-];
-
 const LogistrationPageInner = (props) => {
   const {
     thirdPartyAuthContext,
@@ -89,13 +83,8 @@ const LogistrationPageInner = (props) => {
   return (
     <div className="kku-auth-wrapper">
       <div className="kku-auth-card">
-        {/* Left Panel - Collage */}
+        {/* Left Panel - Single Background Image (handled in CSS) */}
         <div className="kku-left-panel">
-          <div className="kku-collage">
-            <img src={PHOTOS[0]} alt="collage 1" className="collage-item item-1" />
-            <img src={PHOTOS[1]} alt="collage 2" className="collage-item" />
-            <img src={PHOTOS[2]} alt="collage 3" className="collage-item" />
-          </div>
           <div className="kku-overlay">
             <div className="overlay-text-normal">Learning with Us</div>
             <div className="overlay-text-bold">KKU Academy</div>
