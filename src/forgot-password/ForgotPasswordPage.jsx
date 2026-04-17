@@ -106,8 +106,8 @@ const ForgotPasswordPage = () => {
         {/* Left Panel */}
         <div className="kku-left-panel">
           <div className="kku-overlay">
-            <div className="overlay-text-normal">{formatMessage(commonMessages['overlay.sub.text'])}</div>
-            <div className="overlay-text-bold">{formatMessage(commonMessages['overlay.main.text'])}</div>
+            <div className="overlay-text-top">Learning with Us</div>
+            <div className="overlay-text-bottom">KKU Academy</div>
           </div>
         </div>
 
@@ -166,15 +166,10 @@ const ForgotPasswordPage = () => {
 
           {/* Footer 2: Sign Up Link */}
           <div className="kku-footer-signup">
-            <p className="mb-0">
-              Don't have an account?
-              <Link
-                to={updatePathWithQueryParams(REGISTER_PAGE)}
-                className="signup-link"
-              >
-                Sign Up
-              </Link>
-            </p>
+            Don&apos;t have an account? 
+            <Link to={updatePathWithQueryParams(REGISTER_PAGE)} className="signup-link">
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
