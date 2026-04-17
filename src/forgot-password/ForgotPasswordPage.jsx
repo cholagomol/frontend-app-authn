@@ -7,20 +7,17 @@ import {
   Form,
   Hyperlink,
   Icon,
-  StatefulButton,
-  Tab,
-  Tabs,
 } from '@openedx/paragon';
 import { ChevronLeft } from '@openedx/paragon/icons';
 import { Helmet } from 'react-helmet';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useForgotPassword } from './data/apiHook';
 import ForgotPasswordAlert from './ForgotPasswordAlert';
 import messages from './messages';
-import BaseContainer from '../base-container';
+import commonMessages from '../common-components/messages';
 import { FormGroup } from '../common-components';
-import { LOGIN_PAGE, VALID_EMAIL_REGEX } from '../data/constants';
+import { LOGIN_PAGE, REGISTER_PAGE, VALID_EMAIL_REGEX } from '../data/constants';
 import { updatePathWithQueryParams, windowScrollTo } from '../data/utils';
 
 const ForgotPasswordPage = () => {
@@ -37,8 +34,6 @@ const ForgotPasswordPage = () => {
 
   // React Query hook for forgot password
   const { mutate: sendForgotPassword, isPending: isSending } = useForgotPassword();
-
-  const submitState = isSending ? 'pending' : 'default';
 
   useEffect(() => {
     sendPageEvent('login_and_registration', 'reset');
@@ -99,33 +94,44 @@ const ForgotPasswordPage = () => {
     }
   };
 
-  const tabTitle = (
-    <div className="d-inline-flex flex-wrap align-items-center">
-      <Icon src={ChevronLeft} />
-      <span className="ml-2">{formatMessage(messages['sign.in.text'])}</span>
-    </div>
-  );
-
   return (
-    <BaseContainer>
+    <div className="kku-auth-wrapper">
       <Helmet>
         <title>{formatMessage(messages['forgot.password.page.title'],
           { siteName: getConfig().SITE_NAME })}
         </title>
       </Helmet>
-      <div>
-        <Tabs activeKey="" id="controlled-tab" onSelect={(key) => navigate(updatePathWithQueryParams(key))}>
-          <Tab title={tabTitle} eventKey={LOGIN_PAGE} />
-        </Tabs>
-        <div id="main-content" className="main-content">
-          <Form id="forget-password-form" name="forget-password-form" className="mw-xs">
+      
+      <div className="kku-auth-card">
+        {/* Left Panel */}
+        <div className="kku-left-panel">
+          <div className="kku-overlay">
+            <div className="overlay-text-normal">{formatMessage(commonMessages['overlay.sub.text'])}</div>
+            <div className="overlay-text-bold">{formatMessage(commonMessages['overlay.main.text'])}</div>
+          </div>
+        </div>
+
+        {/* Right Panel */}
+        <div className="kku-right-panel">
+          {/* Back to Sign In Link */}
+          <Link
+            to={updatePathWithQueryParams(LOGIN_PAGE)}
+            className="kku-back-link"
+          >
+            <Icon src={ChevronLeft} />
+            <span>{formatMessage(messages['sign.in.text'])}</span>
+          </Link>
+
+          <h2 className="kku-title">
+            {formatMessage(messages['forgot.password.page.heading'])}
+          </h2>
+          <p className="kku-subtitle">
+            {formatMessage(messages['forgot.password.page.instructions'])}
+          </p>
+
+          <Form id="forget-password-form" name="forget-password-form" onSubmit={handleSubmit}>
             <ForgotPasswordAlert email={bannerEmail} emailError={formErrors} status={status} />
-            <h2 className="h4">
-              {formatMessage(messages['forgot.password.page.heading'])}
-            </h2>
-            <p className="mb-4">
-              {formatMessage(messages['forgot.password.page.instructions'])}
-            </p>
+            
             <FormGroup
               floatingLabel={formatMessage(messages['forgot.password.page.email.field.label'])}
               name="email"
@@ -135,44 +141,44 @@ const ForgotPasswordPage = () => {
               handleChange={(e) => setEmail(e.target.value)}
               handleBlur={handleBlur}
               handleFocus={handleFocus}
-              helpText={[formatMessage(messages['forgot.password.email.help.text'], { platformName })]}
             />
-            <StatefulButton
+
+            <button
               id="submit-forget-password"
               name="submit-forget-password"
               type="submit"
-              variant="brand"
-              className="forgot-password--button"
-              state={submitState}
-              labels={{
-                default: formatMessage(messages['forgot.password.page.submit.button']),
-                pending: '',
-              }}
-              onClick={handleSubmit}
-              onMouseDown={(e) => e.preventDefault()}
-            />
-            {(getConfig().LOGIN_ISSUE_SUPPORT_LINK) && (
-              <Hyperlink
-                id="forgot-password"
-                name="forgot-password"
-                className="ml-4 font-weight-500 text-body"
-                destination={getConfig().LOGIN_ISSUE_SUPPORT_LINK}
-                target="_blank"
-                showLaunchIcon={false}
-              >
-                {formatMessage(messages['need.help.sign.in.text'])}
-              </Hyperlink>
-            )}
-            <p className="mt-5.5 small text-gray-700">
+              className="kku-gradient-btn"
+              disabled={isSending}
+            >
+              {isSending ? 'Submitting...' : formatMessage(messages['forgot.password.page.submit.button'])}
+            </button>
+          </Form>
+
+          {/* Footer 1: Additional Help */}
+          <div className="kku-footer-help">
+            <p className="mb-0 text-muted">
               {formatMessage(messages['additional.help.text'], { platformName })}
               <span className="mx-1">
                 <Hyperlink isInline destination={`mailto:${getConfig().INFO_EMAIL}`}>{getConfig().INFO_EMAIL}</Hyperlink>
               </span>
             </p>
-          </Form>
+          </div>
+
+          {/* Footer 2: Sign Up Link */}
+          <div className="kku-footer-signup">
+            <p className="mb-0">
+              Don't have an account?
+              <Link
+                to={updatePathWithQueryParams(REGISTER_PAGE)}
+                className="signup-link"
+              >
+                Sign Up
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-    </BaseContainer>
+    </div>
   );
 };
 

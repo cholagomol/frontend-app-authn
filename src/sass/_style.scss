@@ -755,3 +755,47 @@ select.form-control {
     }
   }
 }
+
+.kku-back-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--kku-red);
+    text-decoration: none;
+    transform: translateX(-4px);
+  }
+}
+
+.kku-footer-help {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.kku-footer-signup {
+  margin-top: auto;
+  padding-top: 2.5rem;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+
+  .signup-link {
+    color: var(--kku-red);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 0.5rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
