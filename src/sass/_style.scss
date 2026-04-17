@@ -537,24 +537,27 @@ select.form-control {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(165, 28, 48, 0.1), rgba(0, 0, 0, 0.4));
+  background: linear-gradient(to bottom, rgba(165, 28, 48, 0.2), rgba(0, 0, 0, 0.5));
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: 3rem;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   color: #fff;
+  text-align: center;
 
   .overlay-text-normal {
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.5px;
   }
 
   .overlay-text-bold {
-    font-size: 3rem;
-    font-weight: 800;
+    font-size: 3.5rem;
+    font-weight: 900;
     line-height: 1.1;
+    text-transform: none;
   }
 }
 
