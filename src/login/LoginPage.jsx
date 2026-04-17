@@ -220,7 +220,7 @@ const LoginPage = ({
         <AccountActivationMessage messageType={activationMsgType} />
         {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
 
-        <p className="text-center text-muted mb-3">Sign in with</p>
+        <p className="kku-social-label">Sign in with</p>
         <div className="kku-social-container">
           <ThirdPartyAuth
             currentProvider={currentProvider}

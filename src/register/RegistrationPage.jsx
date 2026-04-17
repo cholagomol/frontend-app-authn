@@ -286,7 +286,7 @@ const RegistrationPage = (props) => {
             <>
               {!currentProvider && (
                 <>
-                  <p className="text-center text-muted mb-3">Register with</p>
+                  <p className="kku-social-label">Register with</p>
                   <div className="kku-social-container">
                     <ThirdPartyAuth
                       currentProvider={currentProvider}
