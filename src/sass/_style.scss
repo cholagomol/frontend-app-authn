@@ -760,6 +760,40 @@ select.form-control {
   }
 }
 
+.kku-btn-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  align-items: center;
+
+  .kku-back-btn {
+    flex: 0 0 100px;
+    height: 52px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    color: #64748b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+  }
+
+  .kku-gradient-btn {
+    flex: 1;
+    margin-top: 0; // Remove top margin since container handles it
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .kku-gradient-btn {
   width: 100%;
   padding: 1rem;

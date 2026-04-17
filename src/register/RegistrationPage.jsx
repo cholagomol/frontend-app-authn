@@ -356,11 +356,11 @@ const RegistrationPage = (props) => {
                 setFormFields={setConfigurableFormFields}
                 fieldDescriptions={fieldDescriptions}
               />
-              <div className="d-flex gap-3">
-                <button type="button" className="btn btn-outline-secondary flex-grow-1" onClick={() => setStep(1)} style={{borderRadius: '15px'}}>
+              <div className="kku-btn-group">
+                <button type="button" className="kku-back-btn" onClick={() => setStep(1)}>
                   Back
                 </button>
-                <button type="submit" className="kku-gradient-btn flex-grow-1" onClick={handleSubmit} disabled={submitState === PENDING_STATE}>
+                <button type="submit" className="kku-gradient-btn" onClick={handleSubmit} disabled={submitState === PENDING_STATE}>
                   {submitState === PENDING_STATE ? 'Creating...' : 'Create Account'}
                 </button>
               </div>
