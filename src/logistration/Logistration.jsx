@@ -86,8 +86,7 @@ const LogistrationPageInner = (props) => {
         {/* Left Panel - Single Background Image (handled in CSS) */}
         <div className="kku-left-panel">
           <div className="kku-overlay">
-            <div className="overlay-text-normal">Learning with Us</div>
-            <div className="overlay-text-bold">KKU Academy</div>
+            <div className="overlay-text-combined">Learning with Us KKU Academy</div>
           </div>
         </div>
 

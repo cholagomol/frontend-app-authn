@@ -546,18 +546,14 @@ select.form-control {
   color: #fff;
   text-align: center;
 
-  .overlay-text-normal {
-    font-size: 1.75rem;
-    font-weight: 400;
-    margin-bottom: 0.25rem;
+  .overlay-text-combined {
+    font-size: 1.5rem;
+    font-weight: 700;
     letter-spacing: 0.5px;
-  }
-
-  .overlay-text-bold {
-    font-size: 3.5rem;
-    font-weight: 900;
-    line-height: 1.1;
-    text-transform: none;
+    background: rgba(165, 28, 48, 0.85);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
 }
 

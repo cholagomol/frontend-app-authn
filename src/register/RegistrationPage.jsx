@@ -260,7 +260,7 @@ const RegistrationPage = (props) => {
           }
         />
 
-        <h2 className="kku-title text-center">Create Account</h2>
+        <h2 className="kku-title text-center">Create Free Account</h2>
         <p className="kku-subtitle text-center">Create your account to start learning</p>
 
         <div className="kku-step-indicator">
