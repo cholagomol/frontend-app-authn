@@ -54,16 +54,6 @@ const UsernameField = (props) => {
     },
   });
 
-  /**
-   * We need to remove the placeholder from the field, adding a space will do that.
-   * This is needed because we are placing the username suggestions on top of the field.
-   */
-  useEffect(() => {
-    if (usernameSuggestions.length && !value) {
-      handleChange({ target: { name: 'username', value: ' ' } });
-    }
-  }, [handleChange, usernameSuggestions, value]);
-
   const handleOnBlur = (event) => {
     const { value: username } = event.target;
     const fieldError = validateUsername(username, formatMessage);
@@ -147,13 +137,13 @@ const UsernameField = (props) => {
   }
   return (
     <div className="username__form-group-wrapper">
-      {suggestedUsernameDiv}
       <FormGroup
         {...props}
         handleChange={handleOnChange}
         handleFocus={handleOnFocus}
         handleBlur={handleOnBlur}
       />
+      {suggestedUsernameDiv}
     </div>
   );
 };

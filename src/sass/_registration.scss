@@ -49,43 +49,58 @@
   margin-left: 3px;
 }
 
+.username__form-group-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.username-suggestions {
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .username-suggestions--chip {
-  padding: 1px 0.5rem;
-  margin: 0.25rem;
-  border-radius: 0.375rem;
-  line-height: 24px;
-  font-size: 12px;
-  font-weight: normal;
-  color: var(--pgn-color-primary-700);
+  padding: 4px 12px !important;
+  margin: 2px !important;
+  border-radius: 20px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  color: var(--kku-red) !important;
+  border: 1px solid rgba(165, 28, 48, 0.2) !important;
+  background: #fff !important;
+
+  &:hover {
+    background: var(--kku-red) !important;
+    color: #fff !important;
+    border-color: var(--kku-red) !important;
+  }
 }
 
 .username-suggestion--label {
   font-size: 0.75rem;
-  line-height: 1.25rem;
-  margin-right: 0.25rem;
-}
-
-.username__form-group-wrapper {
-  position: relative;
-}
-
-.username-suggestions {
-  position: absolute;
-  inset: 0;
-  padding-left: 15px;
-  z-index: 100;
-}
-
-.username-suggestions__close__button {
-  right: 1rem;
-  position: absolute;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 2px;
 }
 
 .username-scroll-suggested--form-field {
-  width: 20rem;
-  white-space: nowrap;
-  overflow-x: auto;
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.username-suggestions__close__button {
+  display: none; // No longer needed in the new layout
 }
 
 @media (max-width: 372px) {
