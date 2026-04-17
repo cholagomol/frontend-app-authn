@@ -132,6 +132,16 @@ const messages = defineMessages({
     defaultMessage: 'Company or school credentials',
     description: 'Company or school login link text.',
   },
+  'overlay.sub.text': {
+    id: 'overlay.sub.text',
+    defaultMessage: 'Learning with Us',
+    description: 'Sub text for the auth overlay',
+  },
+  'overlay.main.text': {
+    id: 'overlay.main.text',
+    defaultMessage: 'KKU Academy',
+    description: 'Main text for the auth overlay',
+  },
 });
 
 export default messages;

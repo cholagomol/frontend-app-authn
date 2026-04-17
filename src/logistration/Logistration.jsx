@@ -4,14 +4,8 @@ import { getConfig } from '@edx/frontend-platform';
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthService } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import {
-  Icon,
-  Tab,
-  Tabs,
-} from '@openedx/paragon';
-import { ChevronLeft } from '@openedx/paragon/icons';
 import PropTypes from 'prop-types';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 import BaseContainer from '../base-container';
 import { ThirdPartyAuthProvider, useThirdPartyAuthContext } from '../common-components/components/ThirdPartyAuthContext';
@@ -25,10 +19,13 @@ import LoginComponentSlot from '../plugin-slots/LoginComponentSlot';
 import { RegistrationPage } from '../register';
 import { RegisterProvider } from '../register/components/RegisterContext';
 
-const LogistrationPageInner = ({
-  selectedPage,
-}) => {
-  const tpaHint = getTpaHint();
+const PHOTOS = [
+  'https://academy.kku.ac.th/wp-content/uploads/2022/09/about-us.jpg',
+  'https://academy.kku.ac.th/wp-content/uploads/2022/09/kku-academy-cover.jpg',
+  'https://academy.kku.ac.th/wp-content/uploads/2022/09/learning-1.jpg',
+];
+
+const LogistrationPageInner = (props) => {
   const {
     thirdPartyAuthContext,
     clearThirdPartyAuthErrorMessage,
@@ -38,6 +35,9 @@ const LogistrationPageInner = ({
     providers,
     secondaryProviders,
   } = thirdPartyAuthContext;
+
+  const location = useLocation();
+  const selectedPage = location.pathname.includes('/login') ? LOGIN_PAGE : (props.selectedPage || REGISTER_PAGE);
 
   const { formatMessage } = useIntl();
   const [institutionLogin, setInstitutionLogin] = useState(false);
@@ -52,6 +52,8 @@ const LogistrationPageInner = ({
       authService.getCsrfTokenService()
         .getCsrfToken(getConfig().LMS_BASE_URL);
     }
+    // Set theme class
+    document.body.classList.add('dark-mode'); // Default to show we support it, but real logic should toggle
   }, []);
 
   useEffect(() => {
@@ -79,99 +81,87 @@ const LogistrationPageInner = ({
     setKey(tabKey);
   };
 
-  const tabTitle = (
-    <div className="d-flex">
-      <Icon src={ChevronLeft} className="left-icon" />
-      <span className="ml-2">
-        {selectedPage === LOGIN_PAGE
-          ? formatMessage(messages['logistration.sign.in'])
-          : formatMessage(messages['logistration.register'])}
-      </span>
-    </div>
-  );
-
   const isValidTpaHint = () => {
-    const { provider } = getTpaProvider(tpaHint, providers, secondaryProviders);
+    const { provider } = getTpaProvider(getTpaHint(), providers, secondaryProviders);
     return !!provider;
   };
 
+  const isLoginPage = selectedPage === LOGIN_PAGE;
+
   return (
-    <BaseContainer>
-      <div>
-        {disablePublicAccountCreation
-          ? (
-            <>
-              {institutionLogin && (
-                <Tabs defaultActiveKey="" id="controlled-tab" onSelect={handleInstitutionLogin}>
-                  <Tab title={tabTitle} eventKey={LOGIN_PAGE} />
-                </Tabs>
-              )}
-              <div id="main-content" className="main-content">
-                {!institutionLogin && (
-                  <h3 className="mb-4.5">{formatMessage(messages['logistration.sign.in'])}</h3>
-                )}
-                <LoginComponentSlot
-                  institutionLogin={institutionLogin}
-                  handleInstitutionLogin={handleInstitutionLogin}
-                />
-              </div>
-            </>
-          )
-          : (
-            <div>
-              {institutionLogin
-                ? (
-                  <Tabs defaultActiveKey="" id="controlled-tab" onSelect={handleInstitutionLogin}>
-                    <Tab title={tabTitle} eventKey={selectedPage === LOGIN_PAGE ? LOGIN_PAGE : REGISTER_PAGE} />
-                  </Tabs>
-                )
-                : (!isValidTpaHint() && !hideRegistrationLink && (
-                  <Tabs
-                    defaultActiveKey={selectedPage}
-                    id="controlled-tab"
-                    onSelect={(tabKey) => handleOnSelect(tabKey, selectedPage)}
-                  >
-                    <Tab title={formatMessage(messages['logistration.register'])} eventKey={REGISTER_PAGE} />
-                    <Tab title={formatMessage(messages['logistration.sign.in'])} eventKey={LOGIN_PAGE} />
-                  </Tabs>
-                ))}
-              {key && (
-                <Navigate to={updatePathWithQueryParams(key)} replace />
-              )}
-              <div id="main-content" className="main-content">
-                {!institutionLogin && !isValidTpaHint() && hideRegistrationLink && (
-                  <h3 className="mb-4.5">
-                    {formatMessage(messages[selectedPage === LOGIN_PAGE ? 'logistration.sign.in' : 'logistration.register'])}
-                  </h3>
-                )}
-                {selectedPage === LOGIN_PAGE
-                  ? (
-                    <LoginComponentSlot
-                      institutionLogin={institutionLogin}
-                      handleInstitutionLogin={handleInstitutionLogin}
-                    />
-                  )
-                  : (
-                    <RegistrationPage
-                      institutionLogin={institutionLogin}
-                      handleInstitutionLogin={handleInstitutionLogin}
-                    />
-                  )}
-              </div>
+    <div className="kku-auth-wrapper">
+      <div className="kku-auth-card">
+        {/* Left Panel - Collage */}
+        <div className="kku-left-panel">
+          <div className="kku-collage">
+            <img src={PHOTOS[0]} alt="collage 1" className="collage-item item-1" />
+            <img src={PHOTOS[1]} alt="collage 2" className="collage-item" />
+            <img src={PHOTOS[2]} alt="collage 3" className="collage-item" />
+          </div>
+          <div className="kku-overlay">
+            <div className="overlay-text-normal">Learning with Us</div>
+            <div className="overlay-text-bold">KKU Academy</div>
+          </div>
+        </div>
+
+        {/* Right Panel */}
+        <div className="kku-right-panel">
+          {/* Tabs */}
+          {!disablePublicAccountCreation && !isValidTpaHint() && !hideRegistrationLink && (
+            <div className="kku-tabs">
+              <button
+                type="button"
+                className={`kku-tab ${!isLoginPage ? 'active' : ''}`}
+                onClick={() => handleOnSelect(REGISTER_PAGE, selectedPage)}
+              >
+                {formatMessage(messages['logistration.register'])}
+              </button>
+              <button
+                type="button"
+                className={`kku-tab ${isLoginPage ? 'active' : ''}`}
+                onClick={() => handleOnSelect(LOGIN_PAGE, selectedPage)}
+              >
+                {formatMessage(messages['logistration.sign.in'])}
+              </button>
             </div>
           )}
+
+          {key && (
+            <Navigate to={updatePathWithQueryParams(key)} replace />
+          )}
+
+          {/* Form Content */}
+          <div className="form-area">
+            <div id="main-content">
+              {isLoginPage
+                ? (
+                  <LoginComponentSlot
+                    institutionLogin={institutionLogin}
+                    handleInstitutionLogin={handleInstitutionLogin}
+                  />
+                )
+                : (
+                  <RegistrationPage
+                    institutionLogin={institutionLogin}
+                    handleInstitutionLogin={handleInstitutionLogin}
+                  />
+                )}
+            </div>
+          </div>
+        </div>
       </div>
-    </BaseContainer>
+    </div>
   );
 };
 
 LogistrationPageInner.propTypes = {
-  selectedPage: PropTypes.string.isRequired,
+  selectedPage: PropTypes.string,
 };
 
-/**
- * Main Logistration Page component wrapped with providers
- */
+LogistrationPageInner.defaultProps = {
+  selectedPage: REGISTER_PAGE,
+};
+
 const LogistrationPage = (props) => (
   <ThirdPartyAuthProvider>
     <RegisterProvider>

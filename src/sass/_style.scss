@@ -456,3 +456,341 @@ select.form-control {
 .pgn__form-control-decorator-trailing {
   right: 0 !important;
 }
+
+// Custom auth input styling - rounded, thin, light border
+.pgn__form-group {
+
+  .form-control,
+  .pgn__form-control-floating-label .form-control {
+    border-radius: 12px !important;
+    border: 1px solid #d1d5db !important;
+
+    &:focus {
+      border-color: #A51C30 !important;
+      box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.15) !important;
+    }
+  }
+}
+
+// ==========================================
+// KKU ACADEMY CUSTOM UI
+// ==========================================
+
+:root {
+  --kku-red: #A51C30;
+  --kku-orange: #ED1C24;
+  --kku-gradient: linear-gradient(135deg, #A51C30 0%, #ED1C24 100%);
+  --kku-soft-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --kku-card-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.kku-auth-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    background: #fff;
+  }
+}
+
+.kku-auth-card {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 780px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: var(--kku-card-shadow);
+  background: #fff;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    max-width: 500px;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+}
+
+.kku-left-panel {
+  width: 45%;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+
+  @media (max-width: 992px) {
+    display: none;
+  }
+}
+
+.kku-collage {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  height: 100%;
+  padding: 10px;
+  opacity: 0.7;
+
+  .collage-item {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .item-1 { grid-row: span 2; }
+}
+
+.kku-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(165, 28, 48, 0.2), rgba(0, 0, 0, 0.8));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 3rem;
+  color: #fff;
+
+  .overlay-text-normal {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .overlay-text-bold {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+}
+
+.kku-right-panel {
+  flex: 1;
+  padding: 3rem 4rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+  @media (max-width: 576px) {
+    padding: 2rem;
+  }
+}
+
+.kku-tabs {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid #f1f5f9;
+
+  .kku-tab {
+    padding: 0.75rem 0.5rem;
+    font-weight: 600;
+    color: #94a3b8;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    background: none;
+    transition: all 0.3s ease;
+
+    &.active {
+      color: var(--kku-red);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--kku-red);
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+.kku-icon-header {
+  width: 56px;
+  height: 56px;
+  background: rgba(165, 28, 48, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kku-red);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.kku-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.kku-subtitle {
+  color: #64748b;
+  margin-bottom: 2.5rem;
+}
+
+.kku-social-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kku-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+  &:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.kku-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  &::before { margin-right: 1rem; }
+  &::after { margin-left: 1rem; }
+}
+
+.kku-gradient-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 15px;
+  background: var(--kku-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 20px rgba(165, 28, 48, 0.2);
+  margin-top: 1rem;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(165, 28, 48, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Step Indicator
+.kku-steps {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .step-bar {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+
+      &.active::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: var(--kku-red);
+      }
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #94a3b8;
+
+      &.active {
+        color: var(--kku-red);
+      }
+    }
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  body.dark-mode {
+    .kku-auth-wrapper { background: #0f172a; }
+    .kku-auth-card { background: #1e293b; color: #f8fafc; }
+    .kku-title { color: #f1f5f9; }
+    .kku-subtitle { color: #94a3b8; }
+    .kku-tabs { border-color: #334155; }
+    .kku-tabs .kku-tab { color: #64748b; }
+    .kku-social-btn { background: #334155; border-color: #475569; color: #e2e8f0; }
+    .kku-social-btn:hover { background: #475569; }
+    .kku-divider { color: #475569; &::before, &::after { border-color: #334155; } }
+
+    .pgn__form-group .form-control {
+      background: #0f172a !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+
+    .kku-steps .step .step-bar { background: #334155; }
+  }
+}

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getConfig } from '@edx/frontend-platform';
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Form, Spinner, StatefulButton } from '@openedx/paragon';
+import { Form, Spinner } from '@openedx/paragon';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -38,11 +38,11 @@ import {
   getAllPossibleQueryParams, getTpaHint, getTpaProvider, isHostAvailableInQueryParams, setCookie,
 } from '../data/utils';
 import { useRegisterContext } from './components/RegisterContext';
-/**
- * Inner Registration Page component that uses the context
- */
+
 const RegistrationPage = (props) => {
   const { formatMessage } = useIntl();
+  const [step, setStep] = useState(1);
+
   const {
     fieldDescriptions,
     optionalFields,
@@ -88,7 +88,7 @@ const RegistrationPage = (props) => {
     handleInstitutionLogin,
     institutionLogin,
   } = props;
-  const backendRegistrationError = registrationError;
+
   const registrationMutation = useRegistration({
     onSuccess: (data) => {
       setRegistrationResult(data);
@@ -96,31 +96,24 @@ const RegistrationPage = (props) => {
     },
     onError: (errorData) => {
       setRegistrationError(errorData);
+      // If error occurs, might need to stay on step 2 or show error
     },
   });
 
   const [userPipelineDataLoaded, setUserPipelineDataLoaded] = useState(false);
-  const registrationErrorCode = registrationError?.errorCode || backendRegistrationError?.errorCode;
+  const registrationErrorCode = registrationError?.errorCode;
   const submitState = registrationMutation.isPending ? PENDING_STATE : DEFAULT_STATE;
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
   const tpaHint = useMemo(() => getTpaHint(), []);
-  // Initialize form state from local backedUpFormData
-  const backedUpFormData = registrationFormData;
-  const [formFields, setFormFields] = useState({ ...backedUpFormData.formFields });
-  const [configurableFormFields, setConfigurableFormFields] = useState({ ...backedUpFormData.configurableFormFields });
-  const [errors, setErrors] = useState({ ...backedUpFormData.errors });
+  
+  const [formFields, setFormFields] = useState({ ...registrationFormData.formFields });
+  const [configurableFormFields, setConfigurableFormFields] = useState({ ...registrationFormData.configurableFormFields });
+  const [errors, setErrors] = useState({ ...registrationFormData.errors });
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
   const [formStartTime, setFormStartTime] = useState(null);
-  // temporary error state for embedded experience because we don't want to show errors on blur
-  const [temporaryErrors, setTemporaryErrors] = useState({ ...backedUpFormData.errors });
-  const { cta, host } = queryParams;
-  const buttonLabel = cta
-    ? formatMessage(messages['create.account.cta.button'], { label: cta })
-    : formatMessage(messages['create.account.for.free.button']);
+  const [temporaryErrors, setTemporaryErrors] = useState({ ...registrationFormData.errors });
+  const { host } = queryParams;
 
-  /**
-   * Set the userPipelineDetails data in formFields for only first time
-   */
   useEffect(() => {
     if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
       if (thirdPartyAuthErrorMessage) {
@@ -128,24 +121,17 @@ const RegistrationPage = (props) => {
       }
       if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
         const { name = '', username = '', email = '' } = pipelineUserDetails;
-        setFormFields(prevState => ({
-          ...prevState, name, username, email,
-        }));
+        setFormFields(prevState => ({ ...prevState, name, username, email }));
         setUserPipelineDataLoaded(true);
       }
     }
-  }, [
-    thirdPartyAuthApiStatus,
-    thirdPartyAuthErrorMessage,
-    pipelineUserDetails,
-    userPipelineDataLoaded,
-  ]);
+  }, [thirdPartyAuthApiStatus, thirdPartyAuthErrorMessage, pipelineUserDetails, userPipelineDataLoaded]);
 
   const params = { ...queryParams, is_register_page: true };
-  if (tpaHint) {
-    params.tpa_hint = tpaHint;
-  }
+  if (tpaHint) { params.tpa_hint = tpaHint; }
+
   const { data, isSuccess, error } = useThirdPartyAuthHook(REGISTER_PAGE, params);
+  
   useEffect(() => {
     if (!formStartTime) {
       sendPageEvent('login_and_registration', 'register');
@@ -154,32 +140,18 @@ const RegistrationPage = (props) => {
     }
     if (formStartTime) {
       if (isSuccess && data) {
-        setThirdPartyAuthContextSuccess(
-          data.fieldDescriptions,
-          data.optionalFields,
-          data.thirdPartyAuthContext,
-        );
+        setThirdPartyAuthContextSuccess(data.fieldDescriptions, data.optionalFields, data.thirdPartyAuthContext);
         setBackendCountryCode(data.thirdPartyAuthContext.countryCode);
       }
-
-      if (error) {
-        setThirdPartyAuthContextFailure();
-      }
+      if (error) { setThirdPartyAuthContextFailure(); }
     }
-  }, [formStartTime, isSuccess, data, error,
-    setThirdPartyAuthContextBegin, setThirdPartyAuthContextSuccess,
-    setBackendCountryCode, setThirdPartyAuthContextFailure]);
+  }, [formStartTime, isSuccess, data, error]);
 
-  // Handle backend validation errors from context
   useEffect(() => {
     if (backendValidations) {
-      if (registrationEmbedded) {
-        setTemporaryErrors(prevErrors => ({ ...prevErrors, ...backendValidations }));
-      } else {
-        setErrors(prevErrors => ({ ...prevErrors, ...backendValidations }));
-      }
+      setErrors(prevErrors => ({ ...prevErrors, ...backendValidations }));
     }
-  }, [backendValidations, registrationEmbedded]);
+  }, [backendValidations]);
 
   useEffect(() => {
     if (registrationErrorCode) {
@@ -189,9 +161,7 @@ const RegistrationPage = (props) => {
 
   useEffect(() => {
     if (registrationResult.success) {
-      // This event is used by GTM
       sendTrackEvent('edx.bi.user.account.registered.client', {});
-      // This is used by the "User Retention Rate Event" on GTM
       setCookie(getConfig().USER_RETENTION_COOKIE_NAME, true);
     }
   }, [registrationResult]);
@@ -199,73 +169,54 @@ const RegistrationPage = (props) => {
   const handleOnChange = (event) => {
     const { name } = event.target;
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-    if (backendRegistrationError[name]) {
-      clearRegistrationBackendError(name);
-    }
-    // Clear context registration errors
-    if (registrationError.errorCode) {
-      setRegistrationError({});
-    }
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
-    // Update local state
     const newFormFields = { ...formFields, [name]: value };
     setFormFields(newFormFields);
-    // Save to context for persistence across tab switches
-    updateRegistrationFormData({
-      formFields: newFormFields,
-      errors,
-      configurableFormFields,
-    });
+    updateRegistrationFormData({ formFields: newFormFields, errors, configurableFormFields });
   };
 
   const handleErrorChange = (fieldName, errorMessage) => {
-    if (registrationEmbedded) {
-      setTemporaryErrors(prevErrors => ({
-        ...prevErrors,
-        [fieldName]: errorMessage,
-      }));
-      if (errorMessage === '' && errors[fieldName] !== '') {
-        setErrors(prevErrors => ({
-          ...prevErrors,
-          [fieldName]: errorMessage,
-        }));
-      }
+    setErrors(prevErrors => ({ ...prevErrors, [fieldName]: errorMessage }));
+  };
+
+  const handleNextStep = (e) => {
+    e.preventDefault();
+    // Validate Step 1 fields
+    const step1Fields = ['name', 'email', 'username', 'password'];
+    let step1Valid = true;
+    const newErrors = { ...errors };
+
+    if (!formFields.name) { newErrors.name = 'Name is required'; step1Valid = false; }
+    if (!formFields.email) { newErrors.email = 'Email is required'; step1Valid = false; }
+    if (!flags.autoGeneratedUsernameEnabled && !formFields.username) {
+      newErrors.username = 'Username is required'; step1Valid = false;
+    }
+    if (!currentProvider && !formFields.password) {
+      newErrors.password = 'Password is required'; step1Valid = false;
+    }
+
+    if (step1Valid) {
+      setStep(2);
     } else {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        [fieldName]: errorMessage,
-      }));
+      setErrors(newErrors);
     }
   };
 
-  const registerUser = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const totalRegistrationTime = (Date.now() - formStartTime) / 1000;
     let payload = { ...formFields };
 
-    if (currentProvider) {
-      delete payload.password;
-      payload.social_auth_provider = currentProvider;
-    }
-    if (flags.autoGeneratedUsernameEnabled) {
-      delete payload.username;
-    }
-    // Validating form data before submitting
     const { isValid, fieldErrors, emailSuggestion } = isFormValid(
       payload,
-      registrationEmbedded ? temporaryErrors : errors,
+      errors,
       configurableFormFields,
       fieldDescriptions,
       formatMessage,
     );
     setErrors({ ...fieldErrors });
-    updateRegistrationFormData({
-      formFields,
-      errors: fieldErrors,
-      configurableFormFields,
-    });
     setEmailSuggestionContext(emailSuggestion.suggestion, emailSuggestion.type);
 
-    // returning if not valid
     if (!isValid) {
       setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
       return;
@@ -276,21 +227,10 @@ const RegistrationPage = (props) => {
       configurableFormFields,
       flags.showMarketingEmailOptInCheckbox,
       totalRegistrationTime,
-      queryParams);
-    // making register call with React Query
+      queryParams
+    );
     registrationMutation.mutate(payload);
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    registerUser();
-  };
-
-  useEffect(() => {
-    if (autoSubmitRegForm && userPipelineDataLoaded) {
-      registerUser();
-    }
-  }, [autoSubmitRegForm, userPipelineDataLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderForm = () => {
     if (institutionLogin) {
@@ -302,7 +242,7 @@ const RegistrationPage = (props) => {
       );
     }
     return (
-      <>
+      <div className="kku-register-container">
         <Helmet>
           <title>{formatMessage(messages['register.page.title'], { siteName: getConfig().SITE_NAME })}</title>
         </Helmet>
@@ -318,57 +258,66 @@ const RegistrationPage = (props) => {
             getConfig().ENABLE_PROGRESSIVE_PROFILING_ON_AUTHN && !!Object.keys(optionalFields.fields).length
           }
         />
-        {autoSubmitRegForm && !errorCode.type ? (
-          <div className="mw-xs mt-5 text-center">
-            <Spinner animation="border" variant="primary" id="tpa-spinner" />
+
+        <h2 className="kku-title">Create Account</h2>
+        <p className="kku-subtitle">Create your account to start learning</p>
+
+        <div className="kku-steps">
+          <div className="step">
+            <div className={classNames('step-bar', { active: step >= 1 })} />
+            <div className={classNames('step-label', { active: step === 1 })}>Account Details</div>
           </div>
-        ) : (
-          <div
-            className={classNames(
-              'mw-xs mt-3',
-              { 'w-100 m-auto pt-4 main-content': registrationEmbedded },
-            )}
-          >
-            <ThirdPartyAuthAlert
-              currentProvider={currentProvider}
-              platformName={platformName}
-              referrer={REGISTER_PAGE}
-            />
-            <RegistrationFailure
-              errorCode={errorCode.type}
-              failureCount={errorCode.count}
-              context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
-            />
-            <Form id="registration-form" name="registration-form">
+          <div className="step">
+            <div className={classNames('step-bar', { active: step >= 2 })} />
+            <div className={classNames('step-label', { active: step === 2 })}>Additional Info</div>
+          </div>
+        </div>
+
+        <RegistrationFailure
+          errorCode={errorCode.type}
+          failureCount={errorCode.count}
+          context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
+        />
+
+        <Form id="registration-form" name="registration-form">
+          {step === 1 ? (
+            <>
+              {!currentProvider && (
+                <div className="kku-social-container">
+                  <ThirdPartyAuth
+                    currentProvider={currentProvider}
+                    providers={providers}
+                    secondaryProviders={secondaryProviders}
+                    handleInstitutionLogin={handleInstitutionLogin}
+                    thirdPartyAuthApiStatus={thirdPartyAuthApiStatus}
+                  />
+                </div>
+              )}
+              {!currentProvider && <div className="kku-divider">or register with email</div>}
+
               <NameField
                 name="name"
                 value={formFields.name}
-                shouldFetchUsernameSuggestions={!formFields.username.trim()}
                 handleChange={handleOnChange}
                 handleErrorChange={handleErrorChange}
                 errorMessage={errors.name}
-                helpText={[formatMessage(messages['help.text.name'])]}
                 floatingLabel={formatMessage(messages['registration.fullname.label'])}
               />
               <EmailField
                 name="email"
                 value={formFields.email}
-                confirmEmailValue={configurableFormFields?.confirm_email}
-                handleErrorChange={handleErrorChange}
                 handleChange={handleOnChange}
+                handleErrorChange={handleErrorChange}
                 errorMessage={errors.email}
-                helpText={[formatMessage(messages['help.text.email'])]}
                 floatingLabel={formatMessage(messages['registration.email.label'])}
               />
               {!flags.autoGeneratedUsernameEnabled && (
                 <UsernameField
                   name="username"
-                  spellCheck="false"
                   value={formFields.username}
                   handleChange={handleOnChange}
                   handleErrorChange={handleErrorChange}
                   errorMessage={errors.username}
-                  helpText={[formatMessage(messages['help.text.username.1']), formatMessage(messages['help.text.username.2'])]}
                   floatingLabel={formatMessage(messages['registration.username.label'])}
                 />
               )}
@@ -382,69 +331,45 @@ const RegistrationPage = (props) => {
                   floatingLabel={formatMessage(messages['registration.password.label'])}
                 />
               )}
+              <button type="button" className="kku-gradient-btn" onClick={handleNextStep}>
+                Next -> Additional Information
+              </button>
+            </>
+          ) : (
+            <>
               <ConfigurableRegistrationForm
                 email={formFields.email}
                 fieldErrors={errors}
                 formFields={configurableFormFields}
-                setFieldErrors={registrationEmbedded ? setTemporaryErrors : setErrors}
+                setFieldErrors={setErrors}
                 setFormFields={setConfigurableFormFields}
-                autoSubmitRegisterForm={autoSubmitRegForm}
                 fieldDescriptions={fieldDescriptions}
               />
-              <StatefulButton
-                id="register-user"
-                name="register-user"
-                type="submit"
-                variant="brand"
-                className="register-button mt-4 mb-4"
-                state={submitState}
-                labels={{
-                  default: buttonLabel,
-                  pending: '',
-                }}
-                onClick={handleSubmit}
-                onMouseDown={(e) => e.preventDefault()}
-              />
-              {!registrationEmbedded && (
-                <ThirdPartyAuth
-                  currentProvider={currentProvider}
-                  providers={providers}
-                  secondaryProviders={secondaryProviders}
-                  handleInstitutionLogin={handleInstitutionLogin}
-                  thirdPartyAuthApiStatus={thirdPartyAuthApiStatus}
-                />
-              )}
-            </Form>
-          </div>
-        )}
-      </>
+              <div className="d-flex gap-3">
+                <button type="button" className="btn btn-outline-secondary flex-grow-1" onClick={() => setStep(1)} style={{borderRadius: '15px'}}>
+                  Back
+                </button>
+                <button type="submit" className="kku-gradient-btn flex-grow-1" onClick={handleSubmit} disabled={submitState === PENDING_STATE}>
+                  {submitState === PENDING_STATE ? 'Creating...' : 'Create Account'}
+                </button>
+              </div>
+            </>
+          )}
+        </Form>
+      </div>
     );
   };
 
-  if (tpaHint) {
-    if (thirdPartyAuthApiStatus === PENDING_STATE) {
-      return <Skeleton height={36} />;
-    }
-    const { provider, skipHintedLogin } = getTpaProvider(tpaHint, providers, secondaryProviders);
-    if (skipHintedLogin) {
-      window.location.href = getConfig().LMS_BASE_URL + provider.registerUrl;
-      return null;
-    }
-    return provider ? <EnterpriseSSO provider={provider} /> : renderForm();
+  if (tpaHint && thirdPartyAuthApiStatus === PENDING_STATE) {
+    return <Skeleton height={36} />;
   }
-  return (
-    renderForm()
-  );
+
+  return renderForm();
 };
 
 RegistrationPage.propTypes = {
   institutionLogin: PropTypes.bool,
   handleInstitutionLogin: PropTypes.func,
-};
-
-RegistrationPage.defaultProps = {
-  handleInstitutionLogin: null,
-  institutionLogin: false,
 };
 
 export default RegistrationPage;

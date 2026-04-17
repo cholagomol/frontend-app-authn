@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { getConfig } from '@edx/frontend-platform';
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Form, StatefulButton } from '@openedx/paragon';
+import { Form, StatefulButton, Icon } from '@openedx/paragon';
+import { Lock } from '@openedx/paragon/icons';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import Skeleton from 'react-loading-skeleton';
@@ -40,7 +41,6 @@ const LoginPage = ({
   institutionLogin,
   handleInstitutionLogin,
 }) => {
-  // Context for third-party auth
   const {
     thirdPartyAuthApiStatus,
     thirdPartyAuthContext,
@@ -57,7 +57,6 @@ const LoginPage = ({
     setErrors,
   } = useLoginContext();
 
-  // React Query for server state
   const [loginResult, setLoginResult] = useState({ success: false, redirectUrl: '' });
   const [errorCode, setErrorCode] = useState({
     type: '',
@@ -102,7 +101,6 @@ const LoginPage = ({
     sendPageEvent('login_and_registration', 'login');
   }, []);
 
-  // Fetch third-party auth context data
   useEffect(() => {
     setThirdPartyAuthContextBegin();
     if (isSuccess && data) {
@@ -131,43 +129,29 @@ const LoginPage = ({
   }, [thirdPartyErrorMessage]);
 
   const validateFormFields = (payload) => {
-    const {
-      emailOrUsername,
-      password,
-    } = payload;
+    const { emailOrUsername, password } = payload;
     const fieldErrors = { ...errors };
 
     if (emailOrUsername === '') {
       fieldErrors.emailOrUsername = formatMessage(messages['email.validation.message']);
-    } else if (emailOrUsername.length < 2) {
-      fieldErrors.emailOrUsername = formatMessage(messages['username.or.email.format.validation.less.chars.message']);
     }
     if (password === '') {
       fieldErrors.password = formatMessage(messages['password.validation.message']);
     }
 
-    return { ...fieldErrors };
+    return fieldErrors;
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (showResetPasswordSuccessBanner) {
-      setShowResetPasswordSuccessBanner(false);
-    }
-
     const formData = { ...formFields };
     const validationErrors = validateFormFields(formData);
     if (validationErrors.emailOrUsername || validationErrors.password) {
       setErrors(validationErrors);
-      setErrorCode(prev => ({
-        type: INVALID_FORM,
-        count: prev.count + 1,
-        context: {},
-      }));
+      setErrorCode(prev => ({ type: INVALID_FORM, count: prev.count + 1, context: {} }));
       return;
     }
 
-    // add query params to the payload
     const payload = {
       email_or_username: formData.emailOrUsername,
       password: formData.password,
@@ -177,46 +161,24 @@ const LoginPage = ({
   };
 
   const handleOnChange = (event) => {
-    const {
-      name,
-      value,
-    } = event.target;
-    // Save to context for persistence across tab switches
-    setFormFields(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const { name, value } = event.target;
+    setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleOnFocus = (event) => {
     const { name } = event.target;
-    setErrors(prevErrors => ({
-      ...prevErrors,
-      [name]: '',
-    }));
-  };
-  const trackForgotPasswordLinkClick = () => {
-    sendTrackEvent('edx.bi.password-reset_form.toggled', { category: 'user-engagement' });
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
   };
 
-  const {
-    provider,
-    skipHintedLogin,
-  } = getTpaProvider(tpaHint, providers, secondaryProviders);
+  const { provider, skipHintedLogin } = getTpaProvider(tpaHint, providers, secondaryProviders);
 
-  if (tpaHint) {
-    if (thirdPartyAuthApiStatus === PENDING_STATE) {
-      return <Skeleton height={36} />;
-    }
+  if (tpaHint && thirdPartyAuthApiStatus === PENDING_STATE) {
+    return <Skeleton height={36} />;
+  }
 
-    if (skipHintedLogin) {
-      window.location.href = getConfig().LMS_BASE_URL + provider.loginUrl;
-      return null;
-    }
-
-    if (provider) {
-      return <EnterpriseSSO provider={provider} />;
-    }
+  if (tpaHint && skipHintedLogin && provider) {
+    window.location.href = getConfig().LMS_BASE_URL + provider.loginUrl;
+    return null;
   }
 
   if (institutionLogin) {
@@ -238,7 +200,14 @@ const LoginPage = ({
         redirectUrl={loginResult.redirectUrl}
         finishAuthUrl={finishAuthUrl}
       />
-      <div className="mw-xs mt-3 mb-2">
+      
+      <div className="kku-login-container">
+        <div className="kku-icon-header">
+          <Icon src={Lock} />
+        </div>
+        <h2 className="kku-title">Sign In</h2>
+        <p className="kku-subtitle">Sign in to your KKU Academy account</p>
+
         <LoginFailureMessage
           errorCode={errorCode.type}
           errorCount={errorCode.count}
@@ -248,10 +217,22 @@ const LoginPage = ({
           currentProvider={currentProvider}
           platformName={platformName}
         />
-        <AccountActivationMessage
-          messageType={activationMsgType}
-        />
+        <AccountActivationMessage messageType={activationMsgType} />
         {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
+
+        <div className="kku-social-container">
+          <ThirdPartyAuth
+            currentProvider={currentProvider}
+            providers={providers}
+            secondaryProviders={secondaryProviders}
+            handleInstitutionLogin={handleInstitutionLogin}
+            thirdPartyAuthApiStatus={thirdPartyAuthApiStatus}
+            isLoginPage
+          />
+        </div>
+
+        <div className="kku-divider">or sign in with email</div>
+
         <Form id="sign-in-form" name="sign-in-form">
           <FormGroup
             name="emailOrUsername"
@@ -273,37 +254,25 @@ const LoginPage = ({
             errorMessage={errors.password}
             floatingLabel={formatMessage(messages['login.password.label'])}
           />
-          <StatefulButton
-            name="sign-in"
-            id="sign-in"
+          
+          <div className="d-flex justify-content-end mb-3">
+            <Link
+              id="forgot-password"
+              className="text-muted small"
+              to={updatePathWithQueryParams(RESET_PAGE)}
+            >
+              {formatMessage(messages['forgot.password'])}
+            </Link>
+          </div>
+
+          <button
             type="submit"
-            variant="brand"
-            className="login-button-width"
-            state={(isLoggingIn ? PENDING_STATE : 'default')}
-            labels={{
-              default: formatMessage(messages['sign.in.button']),
-              pending: 'pending',
-            }}
+            className="kku-gradient-btn"
             onClick={handleSubmit}
-            onMouseDown={(event) => event.preventDefault()}
-          />
-          <Link
-            id="forgot-password"
-            name="forgot-password"
-            className="btn btn-link font-weight-500 text-body"
-            to={updatePathWithQueryParams(RESET_PAGE)}
-            onClick={trackForgotPasswordLinkClick}
+            disabled={isLoggingIn}
           >
-            {formatMessage(messages['forgot.password'])}
-          </Link>
-          <ThirdPartyAuth
-            currentProvider={currentProvider}
-            providers={providers}
-            secondaryProviders={secondaryProviders}
-            handleInstitutionLogin={handleInstitutionLogin}
-            thirdPartyAuthApiStatus={thirdPartyAuthApiStatus}
-            isLoginPage
-          />
+            {isLoggingIn ? 'Signing in...' : 'Sign in'}
+          </button>
         </Form>
       </div>
     </>
