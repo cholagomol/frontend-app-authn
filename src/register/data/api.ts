@@ -25,8 +25,8 @@ const getFieldsValidations = async (formPayload) => {
   const requestConfig = {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
   };
-  const url = `${getConfig().LMS_BASE_URL}/api/user/v1/validation/registration`;
-  const { data } = await getHttpClient()
+  const url = `${getConfig().LMS_BASE_URL}/api/user/v1/validation/registration/`;
+  const { data } = await getAuthenticatedHttpClient()
     .post(
       url, QueryString.stringify(formPayload), requestConfig)
     .catch((e) => {
