@@ -19,13 +19,13 @@ const SocialAuthProviders = (props) => {
     let displayName = provider.name;
     let iconSrc = provider.iconImage;
 
-    // Custom labels for KKU Academy
+    // Custom labels and icons for KKU Academy
     if (provider.id.includes('google')) {
       displayName = 'Google';
-      iconSrc = iconSrc || 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg';
+      iconSrc = 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg';
     } else if (provider.id.includes('saml') || provider.id.includes('kku')) {
       displayName = 'SSO-KKU';
-      iconSrc = iconSrc || 'https://kku.ac.th/wp-content/uploads/2021/01/logo-kku.png';
+      iconSrc = 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg'; // Use Microsoft icon for SSO-KKU as seen in screenshots
     }
 
     return (
