@@ -578,7 +578,7 @@ select.form-control {
   display: flex;
   flex-direction: column;
   animation: kkuFadeIn 0.3s ease-out;
-  min-height: 400px;
+  min-height: 420px;
 }
 
 @keyframes kkuFadeIn {
@@ -644,21 +644,21 @@ select.form-control {
   font-size: 1.5rem;
 }
 .kku-lock-circle {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   background: #A51C30; // Solid KKU Red
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1rem;
   box-shadow: 0 4px 12px rgba(165, 28, 48, 0.3), 0 10px 20px rgba(165, 28, 48, 0.2);
 
   .pgn__icon, svg {
     color: #ffffff !important;
     fill: #ffffff !important;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
 }
 .kku-title {
