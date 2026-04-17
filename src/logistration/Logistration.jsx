@@ -20,9 +20,9 @@ import { RegistrationPage } from '../register';
 import { RegisterProvider } from '../register/components/RegisterContext';
 
 const PHOTOS = [
-  'https://academy.kku.ac.th/wp-content/uploads/2022/09/about-us.jpg',
-  'https://academy.kku.ac.th/wp-content/uploads/2022/09/kku-academy-cover.jpg',
-  'https://academy.kku.ac.th/wp-content/uploads/2022/09/learning-1.jpg',
+  'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1498243639359-2cee3e309901?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
 ];
 
 const LogistrationPageInner = (props) => {
@@ -52,8 +52,6 @@ const LogistrationPageInner = (props) => {
       authService.getCsrfTokenService()
         .getCsrfToken(getConfig().LMS_BASE_URL);
     }
-    // Set theme class
-    document.body.classList.add('dark-mode'); // Default to show we support it, but real logic should toggle
   }, []);
 
   useEffect(() => {
