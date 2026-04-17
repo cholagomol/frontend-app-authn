@@ -280,8 +280,9 @@ const RegistrationPage = (props) => {
           context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
         />
 
-        <Form id="registration-form" name="registration-form">
-          {step === 1 ? (
+        <div className="kku-registration-container">
+          <Form id="registration-form" name="registration-form">
+            {step === 1 ? (
             <>
               {!currentProvider && (
                 <>
@@ -366,6 +367,7 @@ const RegistrationPage = (props) => {
             </>
           )}
         </Form>
+        </div>
 
         <div className="kku-footer-signup">
           Already have an account? 

@@ -564,10 +564,35 @@ select.form-control {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  min-height: 780px;
 
   @media (max-width: 576px) {
     padding: 2rem;
   }
+}
+
+.form-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  animation: kkuFadeIn 0.3s ease-out;
+}
+
+@keyframes kkuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kku-login-container, .kku-registration-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .kku-tabs {
