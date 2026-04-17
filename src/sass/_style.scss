@@ -502,9 +502,9 @@ select.form-control {
 .kku-auth-card {
   display: flex;
   width: 100%;
-  max-width: 950px;
-  min-height: 600px;
-  border-radius: 30px;
+  max-width: 850px;
+  min-height: 550px;
+  border-radius: 24px;
   overflow: hidden;
   box-shadow: var(--kku-card-shadow);
   background: #fff;
@@ -519,7 +519,7 @@ select.form-control {
 }
 
 .kku-left-panel {
-  width: 40%;
+  width: 38%;
   position: relative;
   overflow: hidden;
   background-image: url('https://academy.kku.ac.th/wp-content/uploads/2022/09/about-us.jpg');
@@ -563,13 +563,13 @@ select.form-control {
 
 .kku-right-panel {
   flex: 1;
-  padding: 2rem 3rem;
+  padding: 1.5rem 2.5rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 
   @media (max-width: 576px) {
-    padding: 2rem;
+    padding: 1.5rem;
   }
 }
 
@@ -578,7 +578,7 @@ select.form-control {
   display: flex;
   flex-direction: column;
   animation: kkuFadeIn 0.3s ease-out;
-  min-height: 480px;
+  min-height: 400px;
 }
 
 @keyframes kkuFadeIn {
@@ -600,8 +600,8 @@ select.form-control {
 
 .kku-tabs {
   display: flex;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
   border-bottom: 2px solid #f1f5f9;
 
   .kku-tab {
