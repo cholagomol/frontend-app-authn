@@ -22,7 +22,7 @@ import { useThirdPartyAuthContext } from '../common-components/components/ThirdP
 import { useThirdPartyAuthHook } from '../common-components/data/apiHook';
 import EnterpriseSSO from '../common-components/EnterpriseSSO';
 import ThirdPartyAuth from '../common-components/ThirdPartyAuth';
-import { LOGIN_PAGE, PENDING_STATE, RESET_PAGE } from '../data/constants';
+import { LOGIN_PAGE, PENDING_STATE, REGISTER_PAGE, RESET_PAGE } from '../data/constants';
 import {
   getActivationStatus,
   getAllPossibleQueryParams,
@@ -202,11 +202,11 @@ const LoginPage = ({
       />
       
       <div className="kku-login-container">
-        <div className="kku-icon-header">
+        <div className="kku-lock-circle">
           <Icon src={Lock} />
         </div>
-        <h2 className="kku-title">Sign In</h2>
-        <p className="kku-subtitle">Sign in to your KKU Academy account</p>
+        <h2 className="kku-title text-center">Sign In</h2>
+        <p className="kku-subtitle text-center">Sign in to your KKU Academy account</p>
 
         <LoginFailureMessage
           errorCode={errorCode.type}
@@ -220,6 +220,7 @@ const LoginPage = ({
         <AccountActivationMessage messageType={activationMsgType} />
         {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
 
+        <p className="text-center text-muted mb-3">Sign in with</p>
         <div className="kku-social-container">
           <ThirdPartyAuth
             currentProvider={currentProvider}
@@ -231,7 +232,9 @@ const LoginPage = ({
           />
         </div>
 
-        <div className="kku-divider">or sign in with email</div>
+        <div className="kku-divider">
+          <span>or sign in with email</span>
+        </div>
 
         <Form id="sign-in-form" name="sign-in-form">
           <FormGroup
@@ -255,16 +258,6 @@ const LoginPage = ({
             floatingLabel={formatMessage(messages['login.password.label'])}
           />
           
-          <div className="d-flex justify-content-end mb-3">
-            <Link
-              id="forgot-password"
-              className="text-muted small"
-              to={updatePathWithQueryParams(RESET_PAGE)}
-            >
-              {formatMessage(messages['forgot.password'])}
-            </Link>
-          </div>
-
           <button
             type="submit"
             className="kku-gradient-btn"
@@ -273,7 +266,24 @@ const LoginPage = ({
           >
             {isLoggingIn ? 'Signing in...' : 'Sign in'}
           </button>
+
+          <div className="text-center mt-3">
+            <Link
+              id="forgot-password"
+              className="text-muted small"
+              to={updatePathWithQueryParams(RESET_PAGE)}
+            >
+              {formatMessage(messages['forgot.password'])}
+            </Link>
+          </div>
         </Form>
+
+        <div className="kku-footer-signup">
+          Don&apos;t have an account? 
+          <Link to={updatePathWithQueryParams(REGISTER_PAGE)} className="signup-link">
+            Sign Up
+          </Link>
+        </div>
       </div>
     </>
   );

@@ -616,6 +616,20 @@ select.form-control {
   font-size: 1.5rem;
 }
 
+.kku-lock-circle {
+  width: 64px;
+  height: 64px;
+  background: var(--kku-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin: 0 auto 1.5rem;
+  font-size: 1.5rem;
+  box-shadow: 0 10px 20px rgba(165, 28, 48, 0.2);
+}
+
 .kku-title {
   font-size: 2rem;
   font-weight: 800;
@@ -682,6 +696,10 @@ select.form-control {
 
   &::before { margin-right: 1rem; }
   &::after { margin-left: 1rem; }
+
+  span {
+    padding: 0 1rem;
+  }
 }
 
 .kku-gradient-btn {
@@ -689,7 +707,7 @@ select.form-control {
   padding: 1rem;
   border: none;
   border-radius: 15px;
-  background: var(--kku-gradient);
+  background: linear-gradient(135deg, #A51C30 0%, #f15a24 100%);
   color: #fff;
   font-weight: 700;
   font-size: 1.1rem;
@@ -715,6 +733,79 @@ select.form-control {
 }
 
 // Step Indicator
+.kku-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  position: relative;
+
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    width: 120px;
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: 8px;
+      border: 2px solid #fff;
+      transition: all 0.3s ease;
+    }
+
+    .step-text {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-align: center;
+    }
+
+    &.active {
+      .step-circle {
+        background: var(--kku-red);
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(165, 28, 48, 0.2);
+      }
+      .step-text {
+        color: var(--kku-red);
+      }
+    }
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: #e2e8f0;
+    z-index: 0;
+  }
+}
+
+.kku-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .kku-steps {
   display: flex;
   gap: 1rem;
