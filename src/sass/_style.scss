@@ -546,14 +546,23 @@ select.form-control {
   color: #fff;
   text-align: center;
 
-  .overlay-text-combined {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    background: rgba(165, 28, 48, 0.85);
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  .overlay-text-top {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+  }
+
+  .overlay-text-bottom {
+    font-size: 2.75rem;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 
