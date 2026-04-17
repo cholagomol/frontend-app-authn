@@ -208,8 +208,13 @@ const RegistrationPage = (props) => {
     const totalRegistrationTime = (Date.now() - formStartTime) / 1000;
     let payload = { ...formFields };
 
+    const validationPayload = { ...payload };
+    if (currentProvider) {
+      delete validationPayload.password;
+    }
+
     const { isValid, fieldErrors, emailSuggestion } = isFormValid(
-      payload,
+      validationPayload,
       errors,
       configurableFormFields,
       fieldDescriptions,
