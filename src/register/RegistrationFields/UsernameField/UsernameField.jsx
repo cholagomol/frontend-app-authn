@@ -43,11 +43,18 @@ const UsernameField = (props) => {
     setValidationsFailure,
     clearUsernameSuggestions,
     clearRegistrationBackendError,
+    backendValidations,
   } = useRegisterContext();
 
   const fieldValidationsMutation = useFieldValidations({
     onSuccess: (data) => {
       setValidationsSuccess(data);
+      // If there's a validation error from backend, report it to the parent
+      if (data && data.username && data.username.userMessage) {
+        handleErrorChange('username', data.username.userMessage);
+      } else if (data && data.validationDecisions && data.validationDecisions.username) {
+        handleErrorChange('username', data.validationDecisions.username);
+      }
     },
     onError: () => {
       setValidationsFailure();
@@ -59,7 +66,7 @@ const UsernameField = (props) => {
     const fieldError = validateUsername(username, formatMessage);
     if (fieldError) {
       handleErrorChange('username', fieldError);
-    } else if (!validationApiRateLimited) {
+    } else if (!validationApiRateLimited && username) {
       fieldValidationsMutation.mutate({ username });
     }
   };
@@ -135,10 +142,14 @@ const UsernameField = (props) => {
   } else if (usernameSuggestions.length > 0 && errorMessage) {
     suggestedUsernameDiv = suggestedUsernames();
   }
+
+  const combinedErrorMessage = errorMessage || (backendValidations && backendValidations.username);
+
   return (
     <div className="username__form-group-wrapper">
       <FormGroup
         {...props}
+        errorMessage={combinedErrorMessage}
         handleChange={handleOnChange}
         handleFocus={handleOnFocus}
         handleBlur={handleOnBlur}
