@@ -29,6 +29,9 @@ const SocialAuthProviders = (props) => {
     } else if (provider.id.includes('linkedin')) {
       displayName = 'Linkedin';
       iconSrc = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png';
+    } else if (provider.id.includes('facebook')) {
+      displayName = 'Facebook';
+      iconSrc = 'https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg';
     }
 
     return (
