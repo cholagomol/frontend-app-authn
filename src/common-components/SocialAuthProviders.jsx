@@ -26,6 +26,9 @@ const SocialAuthProviders = (props) => {
     } else if (provider.id.includes('saml') || provider.id.includes('kku')) {
       displayName = 'SSO-KKU';
       iconSrc = 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg'; // Use Microsoft icon for SSO-KKU as seen in screenshots
+    } else if (provider.id.includes('linkedin')) {
+      displayName = 'Linkedin';
+      iconSrc = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png';
     }
 
     return (
